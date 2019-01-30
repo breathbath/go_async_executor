@@ -4,7 +4,6 @@ import (
 	"async_executor/dto"
 	"async_executor/logger"
 	"async_executor/output"
-	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -12,6 +11,7 @@ import (
 	"time"
 )
 
+//ExecutionFacade main entry point to execute async functions payloads
 type ExecutionFacade struct {
 	termChan             chan bool
 	execPayloadsProvider ExecutionPayloadsProvider
@@ -120,13 +120,13 @@ func (ef *ExecutionFacade) execMsg(origMsg dto.RawInput, funcInput dto.AsyncFunc
 
 	if !ok {
 		logger.LogErrorFromMsg(
-			"Unknown anync function name %s for message %s",
+			"Unknown anync function name: %s for message %s",
 			funcInput.FunctionName,
 			funcInput.MessageId,
 		)
 
 		funcInput.FailedAttemptsCount += 1
-		funcInput.LastError = errors.New("Unknown rpc function name")
+		funcInput.LastError = "Unknown async function name: " + funcInput.FunctionName
 
 		err = ef.errorWriter.OutputMessage(funcInput)
 		if err != nil {
@@ -139,19 +139,29 @@ func (ef *ExecutionFacade) execMsg(origMsg dto.RawInput, funcInput dto.AsyncFunc
 	outputMsg, processorResult := processor.Process(funcInput.Payload)
 	switch processorResult.(type) {
 	case output.NonOutputtableSuccess:
+		logger.Log("Execution success for message %s", funcInput.MessageId)
 		return
 	case output.OutputtableSuccess:
+		logger.Log("Execution success of message %s, will send the result further", funcInput.MessageId)
 		ef.publishResult(outputMsg, ef.outputWriter, funcInput.MessageId)
 	case output.NonRecoverableError:
+		logger.LogError(processorResult.GetError(), "Execution of message %s failed, will not process message further", funcInput.MessageId)
 		funcInput.FailedAttemptsCount += 1
-		funcInput.LastError = processorResult.GetError()
+		funcInput.LastError = processorResult.GetError().Error()
 		ef.publishResult(funcInput, ef.errorWriter, funcInput.MessageId)
 	case output.RecoverableError:
 		funcInput.FailedAttemptsCount += 1
-		funcInput.LastError = processorResult.GetError()
+		funcInput.LastError = processorResult.GetError().Error()
 		if funcInput.FailedAttemptsCount > ef.settings.FailedMessagesRepeatAttemptsCount {
+			logger.LogError(
+				processorResult.GetError(),
+				"Execution of message %s failed and errors limit %d is elapsed, will not process message further",
+				ef.settings.FailedMessagesRepeatAttemptsCount,
+				funcInput.MessageId,
+			)
 			ef.publishResult(funcInput, ef.errorWriter, funcInput.MessageId)
 		} else {
+			logger.LogError(processorResult.GetError(), "Execution of message %s failed, will try to repeat execution later", funcInput.MessageId)
 			ef.publishResult(funcInput, ef.delayWriter, funcInput.MessageId)
 		}
 	}
@@ -167,7 +177,7 @@ func (ef *ExecutionFacade) publishResult(outputMsg dto.OutputMessage, outputter 
 func (ef *ExecutionFacade) markAsDone(origMsg dto.RawInput, msgId string) {
 	err := ef.execPayloadsProvider.MarkAsDone(origMsg)
 	if err != nil {
-		logger.LogError(err, fmt.Sprintf("Marking input as done error for message %s", msgId))
+		logger.LogError(err, "Marking input as done error for message %s", msgId)
 	}
 }
 
@@ -185,7 +195,7 @@ func (ef *ExecutionFacade) validateInputWindow(msg dto.AsyncFuncInput) error {
 
 	msgValidTillTime := time.Time(msg.TimeStamp).Add(time.Second * time.Duration(msg.ValidWindow))
 	if time.Now().UTC().After(msgValidTillTime) {
-		return fmt.Errorf("Message valid time %v is elapsed", msgValidTillTime)
+		return fmt.Errorf("Message's %s lifetime %v is elapsed, will ignore it", msg.MessageId, msgValidTillTime)
 	}
 
 	return nil

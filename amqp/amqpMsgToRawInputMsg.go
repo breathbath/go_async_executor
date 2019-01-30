@@ -5,6 +5,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
+//Adapter to convert amqp.Delivery to RawInput
 type AmqpMsgAsRawInputMsg struct {
 	amqpMsg amqp.Delivery
 }

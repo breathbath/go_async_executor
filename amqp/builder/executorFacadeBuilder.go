@@ -8,20 +8,21 @@ import (
 )
 
 type ExecutionBuildSettings struct {
-	ConnectionString                     string
-	ConnectionAttemptsCount              int
-	ProcessorsCount                      int
-	FailedMessagesRepeatAttemptsCount    int
-	FailedMessagesRepeatDelay            time.Duration
-	OutputBadlyFormattedMessagesToErrors bool
-	OutputResultToExistingExchange       string
+	AmqpConnectionString                 string
+	ConnectionAttemptsCount              int           //will try to connect to RabbitMq this amount of times before failing
+	ProcessorsCount                      int           //how many routines to start for processing async func payloads
+	FailedMessagesRepeatAttemptsCount    int           //after this amount of times func payload will be discarded
+	FailedMessagesRepeatDelay            time.Duration //on failure a func execution will be repeated after delay time
+	OutputBadlyFormattedMessagesToErrors bool          //shall badly formatted payloads be published to the errors queue
+	OutputResultToExistingExchange       string        //returned result will be published to this exchange for further
+	ErrorMessagesLifeTime                time.Duration //for how long queue should keep error messages
 }
 
 func BuildExecutorFacade(
 	funcExecutors []executor.AsyncFunctionExecutor,
 	buildSettings ExecutionBuildSettings,
 ) (facade *executor.ExecutionFacade, err error) {
-	conn, err := BuildAmqpConnection(buildSettings.ConnectionString, buildSettings.ConnectionAttemptsCount)
+	conn, err := BuildAmqpConnection(buildSettings.AmqpConnectionString, buildSettings.ConnectionAttemptsCount)
 	if err != nil {
 		return
 	}
@@ -41,7 +42,11 @@ func BuildExecutorFacade(
 		buildSettings.FailedMessagesRepeatAttemptsCount,
 	}
 
-	errOutputter, err := amqp.NewAmqpOutputter(AsyncErrorsQueueName, amqp.AmqpWritingSettings{}, conn.Conn)
+	errOutputter, err := amqp.NewAmqpOutputter(
+		AsyncErrorsQueueName,
+		amqp.AmqpWritingSettings{LifeTime: buildSettings.ErrorMessagesLifeTime},
+		conn.Conn,
+	)
 	if err != nil {
 		return
 	}

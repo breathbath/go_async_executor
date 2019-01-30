@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
+//AmqpWritingSettings customisation for amqp publishing logic
 type AmqpWritingSettings struct {
-	RoutingKey           string
 	LifeTime             time.Duration
 	Args                 *amqp.Publishing
 	Mandatory, Immediate bool

@@ -11,4 +11,7 @@ func main() {
 
 	err = asyncFuncRegistrationFacade.CallFunctionAsync("time_executor", "Call me async", 0)
 	errs.FailOnError(err)
+
+	err = asyncFuncRegistrationFacade.CallFunctionAsync("fail_me", "", 0)
+	errs.FailOnError(err)
 }

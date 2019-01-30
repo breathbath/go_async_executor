@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/streadway/amqp"
 )
-
+//AmqpAsyncFuncRegistrator publishes async func payloads to the processing queue
 type AmqpAsyncFuncRegistrator struct {
 	inputQueueName    string
 	inputExchangeName string
@@ -90,7 +90,7 @@ func (ais *AmqpAsyncFuncRegistrator) RegisterAsyncExecution(msg dto.AsyncFuncInp
 
 	err = ais.channel.Publish(
 		ais.inputExchangeName,
-		ais.writingSettings.RoutingKey,
+		"",
 		ais.writingSettings.Mandatory,
 		ais.writingSettings.Immediate,
 		*args,
@@ -98,10 +98,9 @@ func (ais *AmqpAsyncFuncRegistrator) RegisterAsyncExecution(msg dto.AsyncFuncInp
 
 	if err == nil {
 		logger.Log(
-			"Published message %s to exchange %s, routing key: %s",
+			"Published message %s to exchange %s",
 			msgString,
 			ais.inputExchangeName,
-			ais.writingSettings.RoutingKey,
 		)
 	}
 

@@ -15,8 +15,9 @@ func Log(msg string, args ...interface{}) {
 	log.Printf(msg, args...)
 }
 
-func LogError(err error, msg string) {
+func LogError(err error, msg string, args ...interface{}) {
 	if msg != "" {
+		msg = fmt.Sprintf(msg, args)
 		log.Printf("%s: %v\n", msg, err)
 	} else {
 		log.Println(err)

@@ -12,8 +12,8 @@ type AsyncFuncInput struct {
 	TimeStamp           time.Time `json:"timestamp"`
 	ValidWindow         int64     `json:"valid_window"`
 	MessageId           string    `json:"id"`
-	FailedAttemptsCount int     `json:"failed_attempts_count"`
-	LastError           error     `json:"last_error"`
+	FailedAttemptsCount int       `json:"failed_attempts_count"`
+	LastError           string    `json:"last_error"`
 }
 
 func NewAsyncFuncInput(rawMsg []byte) (AsyncFuncInput, error) {

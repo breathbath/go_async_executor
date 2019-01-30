@@ -1,5 +1,6 @@
 package executor
 
+//AsyncFuncExecutorRegistry contains functions to be called in async mode
 type AsyncFuncExecutorRegistry struct {
 	asyncFuncExecutors map[string]AsyncFunctionExecutor
 }

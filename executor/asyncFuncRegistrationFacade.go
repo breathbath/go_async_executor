@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//AsyncFuncRegistrationFacade main entry point to register async function calls
 type AsyncFuncRegistrationFacade struct {
 	funcExecutorRegistry *AsyncFuncExecutorRegistry
 	asyncFuncRegistrator AsyncFuncRegistrator
@@ -35,7 +36,7 @@ func (cf *AsyncFuncRegistrationFacade) CallFunctionAsync(funcName, payload strin
 		ValidWindow:         int64(lifeTime.Seconds()),
 		MessageId:           enc.NewUuid(""),
 		FailedAttemptsCount: 0,
-		LastError:           nil,
+		LastError:           "",
 	}
 
 	return cf.asyncFuncRegistrator.RegisterAsyncExecution(input)

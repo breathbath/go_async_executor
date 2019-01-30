@@ -7,12 +7,14 @@ import (
 	"github.com/streadway/amqp"
 )
 
+//AmqpOutputter different publishers for error, delayed execution and processable output of async function calls
 type AmqpOutputter struct {
 	settings     AmqpWritingSettings
 	ch           *amqp.Channel
 	exchangeName string
 }
 
+//NewDelayedAmqpOutputter creates publisher for delayed payloads which should be repeated after the delay time
 func NewDelayedAmqpOutputter(id string, settings AmqpWritingSettings, conn *amqp.Connection) (*AmqpOutputter, error) {
 	ch, err := conn.Channel()
 	if err != nil {
@@ -57,6 +59,7 @@ func NewDelayedAmqpOutputter(id string, settings AmqpWritingSettings, conn *amqp
 	return &AmqpOutputter{settings: settings, ch: ch, exchangeName: exchangeNameDelayed}, nil
 }
 
+//NewAmqpOutputter publisher to send failed payloads to the error queue
 func NewAmqpOutputter(id string, settings AmqpWritingSettings, conn *amqp.Connection) (*AmqpOutputter, error) {
 	ch, err := conn.Channel()
 	if err != nil {
@@ -105,6 +108,7 @@ func NewAmqpOutputter(id string, settings AmqpWritingSettings, conn *amqp.Connec
 	return &AmqpOutputter{settings: settings, ch: ch, exchangeName: exchangeName}, nil
 }
 
+//NewExistingAmqpOutputter publisher to send async function outputs for further processing
 func NewExistingAmqpOutputter(conn *amqp.Connection, existingExchangeName string, settings AmqpWritingSettings) (*AmqpOutputter, error) {
 	ch, err := conn.Channel()
 	if err != nil {
@@ -124,6 +128,7 @@ func NewExistingAmqpOutputter(conn *amqp.Connection, existingExchangeName string
 	return &AmqpOutputter{settings: settings, ch: ch, exchangeName: existingExchangeName}, err
 }
 
+//OutputMessage means publish it to the corresponding exchange
 func (aot *AmqpOutputter) OutputMessage(msg dto.OutputMessage) error {
 	msgString, err := msg.Serialize()
 	if err != nil {
@@ -139,26 +144,32 @@ func (aot *AmqpOutputter) OutputMessage(msg dto.OutputMessage) error {
 		}
 	}
 
+	expiration := ""
 	if aot.settings.LifeTime > 0 {
-		args.Expiration = fmt.Sprintf("%.0f", aot.settings.LifeTime.Seconds()*1000)
+		expiration = fmt.Sprintf("%.0f", aot.settings.LifeTime.Seconds()*1000)
 	}
+	args.Expiration = expiration
 
 	args.Body = []byte(msgString)
 
 	err = aot.ch.Publish(
 		aot.exchangeName,
-		aot.settings.RoutingKey,
+		"",
 		aot.settings.Mandatory,
 		aot.settings.Immediate,
 		*args,
 	)
 
 	if err == nil {
+		expirationLog := ""
+		if expiration != "" {
+			expirationLog = fmt.Sprintf(" with lifetime of %sms", expiration)
+		}
 		logger.Log(
-			"Published message %s to exchange %s, routing key: %s",
+			"Published message %s to exchange %s%s",
 			msgString,
 			aot.exchangeName,
-			aot.settings.RoutingKey,
+			expirationLog,
 		)
 	}
 

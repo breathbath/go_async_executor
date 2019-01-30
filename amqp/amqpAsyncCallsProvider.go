@@ -8,6 +8,7 @@ import (
 	"strconv"
 )
 
+//AmqpAsyncCallsProvider responsible for consuming async func input payloads
 type AmqpAsyncCallsProvider struct {
 	readingSettings   *InputReadingSettings
 	inputQueueName    string
@@ -77,6 +78,7 @@ func NewAmqpAsyncCallsProvider(
 	}, nil
 }
 
+//MarkAsDone wrapper for ack calls
 func (ais *AmqpAsyncCallsProvider) MarkAsDone(msg dto.RawInput) error {
 	idInt, err := strconv.ParseUint(msg.GetId(), 10, 64)
 	if err != nil {
@@ -86,6 +88,7 @@ func (ais *AmqpAsyncCallsProvider) MarkAsDone(msg dto.RawInput) error {
 	return ais.channel.Ack(idInt, false)
 }
 
+//GetAsyncCalls provides channel for getting async func payload inputs
 func (ais *AmqpAsyncCallsProvider) GetAsyncCalls() (<-chan dto.RawInput, error) {
 	logger.Log("Will fetch amqp messages from channel '%s'", ais.inputQueueName)
 	amqpCh, err := ais.channel.Consume(
@@ -104,6 +107,7 @@ func (ais *AmqpAsyncCallsProvider) GetAsyncCalls() (<-chan dto.RawInput, error) 
 
 	rawMsgChannel := make(chan dto.RawInput, 10000)
 
+	//we convert amqp.Delivery messages sent to the amqp consuming channel to RawInput
 	go func() {
 		for amqpMsg := range amqpCh {
 			rawMsgChannel <- AmqpMsgAsRawInputMsg{amqpMsg:amqpMsg}
