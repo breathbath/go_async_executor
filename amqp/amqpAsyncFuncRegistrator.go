@@ -1,8 +1,8 @@
 package amqp
 
 import (
-	"async_executor/dto"
-	"async_executor/logger"
+	"go_async_executor/dto"
+	"go_async_executor/logger"
 	"fmt"
 	"github.com/streadway/amqp"
 )

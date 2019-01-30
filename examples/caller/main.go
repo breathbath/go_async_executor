@@ -1,7 +1,7 @@
 package main
 
 import (
-	"async_executor/examples/builder"
+	"go_async_executor/examples/builder"
 	"github.com/breathbath/go_utils/utils/errs"
 )
 

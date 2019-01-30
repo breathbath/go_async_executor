@@ -1,9 +1,9 @@
 package builder
 
 import (
-	"async_executor/amqp"
-	"async_executor/executor"
-	"async_executor/output"
+	"go_async_executor/amqp"
+	"go_async_executor/executor"
+	"go_async_executor/output"
 	"time"
 )
 

@@ -1,7 +1,7 @@
 package executor
 
 import (
-	"async_executor/dto"
+	"go_async_executor/dto"
 	"fmt"
 	"github.com/breathbath/go_utils/utils/enc"
 	"time"

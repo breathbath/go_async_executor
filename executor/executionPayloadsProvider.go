@@ -1,7 +1,7 @@
 package executor
 
 import (
-	"async_executor/dto"
+	"go_async_executor/dto"
 )
 
 //ExecutionPayloadsProvider implementations for dequeueing raw queue messages

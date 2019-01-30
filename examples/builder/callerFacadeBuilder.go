@@ -1,8 +1,8 @@
 package builder
 
 import (
-	"async_executor/amqp/builder"
-	"async_executor/executor"
+	"go_async_executor/amqp/builder"
+	"go_async_executor/executor"
 )
 
 func BuildAsyncFuncRegistrationFacade() (facade *executor.AsyncFuncRegistrationFacade, err error) {

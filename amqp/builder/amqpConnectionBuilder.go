@@ -1,6 +1,6 @@
 package builder
 
-import "async_executor/amqp/connection"
+import "go_async_executor/amqp/connection"
 
 func BuildAmqpConnection(connectionString string, connectionAttemptsCount int) (conn *connection.AmqpConnection, err error) {
 	amqpConnProvider := connection.NewAmqpConnectionProvider(

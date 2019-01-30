@@ -1,9 +1,9 @@
 package builder
 
 import (
-	"async_executor/examples/func_caller"
-	"async_executor/executor"
-	"async_executor/funcAdapters"
+	"go_async_executor/examples/func_caller"
+	"go_async_executor/executor"
+	"go_async_executor/funcAdapters"
 	"errors"
 	"fmt"
 	"time"

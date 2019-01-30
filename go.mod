@@ -1,4 +1,4 @@
-module async_executor
+module go_async_executor
 
 require (
 	github.com/breathbath/go_utils v0.0.0-20190124002238-aeca2fd6b181

@@ -1,8 +1,8 @@
 package executor
 
 import (
-	"async_executor/dto"
-	"async_executor/output"
+	"go_async_executor/dto"
+	"go_async_executor/output"
 )
 
 //AsyncFunctionExecutor implementations for concrete async functions logic
