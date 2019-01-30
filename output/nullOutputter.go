@@ -1,6 +1,6 @@
 package output
 
-import "go_async_executor/dto"
+import "github.com/breathbath/go_async_executor/dto"
 
 //NullOutputter implements Outputter to discard outputs of async func calls
 type NullOutputter struct {
