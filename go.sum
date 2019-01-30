@@ -1,0 +1,8 @@
+github.com/breathbath/go_utils v0.0.0-20190124002238-aeca2fd6b181 h1:g0TRh48iSNCkQmy/LLVZEehwfDuSGQ4+6/OZls60kJs=
+github.com/breathbath/go_utils v0.0.0-20190124002238-aeca2fd6b181/go.mod h1:13LzDp3v9P0ZnNpBO+VG7Fdrj+mPGjsMQUm6auQya2A=
+github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d h1:VhgPp6v9qf9Agr/56bj7Y/xa04UccTW04VP0Qed4vnQ=
+github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d/go.mod h1:YUTz3bUH2ZwIWBy3CJBeOBEugqcmXREj14T+iG/4k4U=
+github.com/streadway/amqp v0.0.0-20181205114330-a314942b2fd9 h1:37QTz/gdHBLQcsmgMTnQDSWCtKzJ7YnfI2M2yTdr4BQ=
+github.com/streadway/amqp v0.0.0-20181205114330-a314942b2fd9/go.mod h1:1WNBiOZtZQLpVAyu0iTduoJL9hEsMloAK5XWrtW0xdY=
+golang.org/x/crypto v0.0.0-20190129210102-ccddf3741a0c h1:MWY7h75sb9ioBR+s5Zgq1JYXxhbZvrSP2okwLi3ItmI=
+golang.org/x/crypto v0.0.0-20190129210102-ccddf3741a0c/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
