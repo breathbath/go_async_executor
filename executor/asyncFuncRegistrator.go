@@ -1,7 +1,7 @@
 package executor
 
 import (
-	"go_async_executor/dto"
+	"github.com/breathbath/go_async_executor/dto"
 )
 
 //AsyncFuncRegistrator allows polymorfic implementations for enqueuing async function payloads

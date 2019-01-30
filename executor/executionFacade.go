@@ -1,9 +1,9 @@
 package executor
 
 import (
-	"go_async_executor/dto"
-	"go_async_executor/logger"
-	"go_async_executor/output"
+	"github.com/breathbath/go_async_executor/dto"
+	"github.com/breathbath/go_async_executor/logger"
+	"github.com/breathbath/go_async_executor/output"
 	"fmt"
 	"os"
 	"os/signal"

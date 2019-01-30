@@ -1,9 +1,9 @@
 package builder
 
 import (
-	"go_async_executor/examples/func_caller"
-	"go_async_executor/executor"
-	"go_async_executor/funcAdapters"
+	"github.com/breathbath/go_async_executor/examples/func_caller"
+	"github.com/breathbath/go_async_executor/executor"
+	"github.com/breathbath/go_async_executor/funcAdapters"
 	"errors"
 	"fmt"
 	"time"

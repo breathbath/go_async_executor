@@ -1,7 +1,7 @@
 package builder
 
 import (
-	"go_async_executor/executor"
+	"github.com/breathbath/go_async_executor/executor"
 )
 
 func BuildExecutorsRegistry(funcExecutors []executor.AsyncFunctionExecutor) *executor.AsyncFuncExecutorRegistry {

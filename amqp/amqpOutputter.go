@@ -1,8 +1,8 @@
 package amqp
 
 import (
-	"go_async_executor/dto"
-	"go_async_executor/logger"
+	"github.com/breathbath/go_async_executor/dto"
+	"github.com/breathbath/go_async_executor/logger"
 	"fmt"
 	"github.com/streadway/amqp"
 )

@@ -1,8 +1,8 @@
 package funcAdapters
 
 import (
-	"go_async_executor/dto"
-	"go_async_executor/output"
+	"github.com/breathbath/go_async_executor/dto"
+	"github.com/breathbath/go_async_executor/output"
 )
 
 type NamedFunc struct {

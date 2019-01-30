@@ -1,8 +1,8 @@
 package builder
 
 import (
-	"go_async_executor/amqp"
-	"go_async_executor/executor"
+	"github.com/breathbath/go_async_executor/amqp"
+	"github.com/breathbath/go_async_executor/executor"
 )
 
 func BuildAmqpCallerFacade(

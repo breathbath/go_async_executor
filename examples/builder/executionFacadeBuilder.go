@@ -1,8 +1,8 @@
 package builder
 
 import (
-	"go_async_executor/amqp/builder"
-	"go_async_executor/executor"
+	"github.com/breathbath/go_async_executor/amqp/builder"
+	"github.com/breathbath/go_async_executor/executor"
 	"time"
 )
 
